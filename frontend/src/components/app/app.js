@@ -1,28 +1,38 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import './app.css';
 
-function handleSubmit(event) {
+export default class App extends Component {
   
 
-  axios
-    .get(`/api/todos`).then(({data}) => {
-      data.forEach(element => {
-        console.log(element.title)
-      })
-    })
-    .catch(err => console.log(err))
-}
-
-
-
-const App = () => {
-    return (
-      <div onLoad={handleSubmit()}>
-        
-        <h1>Hellos</h1>
-      </div>
-    );
+  state = {
+    title: null,
   };
+
+  getTodos = () => {
+      axios
+        .get(`/api/todos`).then(({data}) => {
+          console.log(data[0].title);
+          this.setState({
+            title: data[0].title
+          });
+        })
+  }
   
-  export default App;
+
+  constructor() {
+    super();
+    this.getTodos();
+  }
+  
+  render() {
+    const {title} = this.state;
+    console.log(title)
+
+    return (
+      <div>
+        <p>{title}</p>
+      </div>
+    )
+  }
+}
